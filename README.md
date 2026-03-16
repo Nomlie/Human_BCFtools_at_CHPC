@@ -47,7 +47,9 @@ group_runs/
         ├── HCC.chr1.bcftools.annotated.filtered.vcf.gz
         ├── HCC.chr14.bcftools.annotated.filtered.vcf.gz
         └── HCC.chr21.bcftools.annotated.filtered.vcf.gz
-Quick Start
+```
+
+## Quick Start
 1. Edit the configuration file
 
 Each user only needs to edit:
@@ -62,37 +64,42 @@ Generate regions.tsv
 
 This only needs to be done once for a given chromosome group.
 
-bash run_pipeline.sh setup
+```bash bash run_pipeline.sh setup```
 Submit the main chunk-processing job
 
 This runs the parallel variant calling workflow on a 24-core SMP node.
 
-bash run_pipeline.sh submit
+```bash bash run_pipeline.sh submit```
+
 Merge chunk outputs into final chromosome-level VCFs
 
 Run this after the chunk-processing job completes.
 
-bash run_pipeline.sh merge
+```bash bash run_pipeline.sh merge```
+
 3. Check progress at any time
-bash run_pipeline.sh progress
+```bash bash run_pipeline.sh progress```
 
 This creates a report in:
 
 group_runs/<your_group>/progress_report_*.txt
-Available Commands
-bash run_pipeline.sh <command>
-Command	Action
-setup	Submit 01_make_regions.sh to create regions.tsv
-submit	Submit 02_run_chunks.sh for parallel variant calling
+
+## Available Commands
+```bash bash run_pipeline.sh <command>```
+
+Command	    Action
+setup	    Submit 01_make_regions.sh to create regions.tsv
+submit	    Submit 02_run_chunks.sh for parallel variant calling
 progress	Submit 04_check_progress.sh to generate a progress report
-merge	Submit 03_merge_chromosomes.sh to merge chunked outputs
-help	Show usage information
-Resuming After Failure
+merge	    Submit 03_merge_chromosomes.sh to merge chunked outputs
+help	    Show usage information
+
+## Resuming After Failure
 Re-running the pipeline
 
 In most cases, you can simply re-submit the main job:
 
-bash run_pipeline.sh submit
+```bash bash run_pipeline.sh submit```
 
 Completed chunks will be detected and skipped automatically.
 
@@ -112,7 +119,9 @@ Delete only the incomplete files for the failed region(s)
 Re-submit the job
 
 Option B: Automatic cleanup of incomplete files
-qsub -v AUTO_CLEAN_INCOMPLETE=1 02_run_chunks.sh
+
+```bash qsub -v AUTO_CLEAN_INCOMPLETE=1 02_run_chunks.sh```
+
 Configuration
 
 Main settings are stored in pipeline.conf.
