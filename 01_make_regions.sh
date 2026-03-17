@@ -4,7 +4,7 @@
 #PBS -P CBBI1039
 #PBS -l select=1:ncpus=1:mem=4gb
 #PBS -l walltime=01:00:00
-
+#PBS -m abe
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
