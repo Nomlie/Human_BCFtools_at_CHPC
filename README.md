@@ -140,10 +140,10 @@ This is the main stage of the workflow.
 
 It will:
 
-process your assigned chromosomes
-run chunk by chunk
-skip already completed chunks
-write logs, summaries, checkpoints, and outputs into the group_runs directory
+- process your assigned chromosomes
+- run chunk by chunk
+- skip already completed chunks
+- write logs, summaries, checkpoints, and outputs into the group_runs directory
 
 **Important:**
 
@@ -156,6 +156,7 @@ The runtime will depend on:
 - cluster load
 
 **3. Check Progress**
+
 To monitor the run, use:
 
 ```bash run_pipeline.sh progress```
@@ -217,6 +218,7 @@ In most cases, you can simply re-submit the main job:
 Completed chunks will be detected and skipped automatically.
 
 If some chunks failed midway
+
 ***Option A: Manual cleanup**
 
 This is the safer option.
@@ -232,7 +234,7 @@ Re-submit the job
 
 **Option B: Automatic cleanup of incomplete files**
 
-```bash qsub -v AUTO_CLEAN_INCOMPLETE=1 02_run_chunks.sh```
+```qsub -v AUTO_CLEAN_INCOMPLETE=1 02_run_chunks.sh```
 
 
 ## Configuration
@@ -241,31 +243,34 @@ Main settings are stored in pipeline.config.
 
 Each processed chunk generates the following files:
 
+```
 File	Description
 HCC.<chr>.<start>_<end>.bcf	Raw multi-sample BCF produced after mpileup and call
 HCC.<chr>.<start>_<end>.annotated.bcf	BCF annotated with dbSNP rsIDs
 HCC.<chr>.<start>_<end>.filtered.vcf.gz	Final compressed VCF after QUAL >= 20 filtering
+```
+
 Output Structure
 
 Results are written into a chromosome-group-specific directory such as:
 
-group_runs/chr1_chr14_chr21/
+- group_runs/chr1_chr14_chr21/
 
 This directory contains:
 
-regions.tsv — list of genomic chunks
+- regions.tsv — list of genomic chunks
 
-master_logs/ — overall run logs
+- master_logs/ — overall run logs
 
-chunks/ — per-region outputs
+- chunks/ — per-region outputs
 
-logs/ — detailed per-region logs
+- logs/ — detailed per-region logs
 
-checkpoints/ — completion stamp files
+- checkpoints/ — completion stamp files
+ 
+- summaries/ — timing and status files per region
 
-summaries/ — timing and status files per region
-
-final/ — merged final chromosome VCFs
+- final/ — merged final chromosome VCFs
 
 ## Requirements
 
