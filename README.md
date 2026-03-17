@@ -128,7 +128,7 @@ Generate the regions.tsv file for your chromosome group:
 
 ```bash run_pipeline.sh setup```
 
-This step usually only needs to be run once, unless your chromosome list or chunk size changes.
+This step usually only needs to be run once, unless your chromosome list or chunk size changes. It should take lesser than an hour and produce regions.tsv file
 
 **2. Submit the Main Analysis Job**
 
@@ -190,25 +190,6 @@ This merges all filtered chunk-level VCFs into final chromosome-level VCF files.
 - merge	- Submit 03_merge_chromosomes.sh to merge chunked outputs
 - help	- Show usage information
 
-## Recommended Order
-
-Run the stages in this order:
-
-```bash
-bash run_pipeline.sh setup
-bash run_pipeline.sh submit
-bash run_pipeline.sh progress
-bash run_pipeline.sh merge
-```
-
-In practice, the correct workflow is:
-
-- Run setup
-- Wait for the job to finish, it should take less than an hour.
-- Run submit
-- Wait for the main job to finish, this is your main script that you should send walltime request for if it does not finish on time
-- Check progress if needed
-- Run merge only once all chunks are complete
 
 ## Checking Whether the Job Is Still Running
 
@@ -250,22 +231,13 @@ Delete only the incomplete files for the failed region(s)
 Re-submit the job
 
 **Option B: Automatic cleanup of incomplete files**
-qsub -v AUTO_CLEAN_INCOMPLETE=1 02_run_chunks.sh
+
+```bash qsub -v AUTO_CLEAN_INCOMPLETE=1 02_run_chunks.sh```
 
 
 ## Configuration
 
 Main settings are stored in pipeline.config.
-
-Variable	Example / Default	Meaning
-CHROM_LIST	(chr1 chr14 chr21)	Chromosomes assigned to the user
-CHUNK_SIZE	10000000	Chunk size in base pairs
-MAX_DEPTH	1000	Value passed to bcftools mpileup --max-depth
-PARALLEL_CHROMS	3	Number of chromosomes processed concurrently
-THREADS_PER_CHROM	8	Threads allocated per chromosome
-BAM_LIST	/path/to/HCC_BAM.txt	Text file containing input BAM paths, one per line
-CONFIG_TXT	/path/to/config.txt	Shared project configuration file with reference and dbSNP paths
-Output Files Per Chunk
 
 Each processed chunk generates the following files:
 
