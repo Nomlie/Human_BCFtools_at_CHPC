@@ -119,7 +119,7 @@ group_runs/
 The pipeline is controlled through:
 
 ```bash run_pipeline.sh <command> ```
-1. Setup
+**1. Setup**
 
 Generate the regions.tsv file for your chromosome group:
 
@@ -127,7 +127,7 @@ Generate the regions.tsv file for your chromosome group:
 
 This step usually only needs to be run once, unless your chromosome list or chunk size changes.
 
-2. Submit the Main Analysis Job
+**2. Submit the Main Analysis Job**
 
 Submit the main PBS job that processes all chromosome chunks:
 
@@ -143,15 +143,16 @@ skip already completed chunks
 write logs, summaries, checkpoints, and outputs into the group_runs directory
 
 **Important:**
+
 After submitting this stage, wait for the script/job to finish before running the merge step.
 Do not run the merge step immediately after submission.
 The runtime will depend on:
-number of BAM files
-chromosome size
-chunk size
-cluster load
+- number of BAM files
+- chromosome size
+- chunk size
+- cluster load
 
-3. Check Progress
+**3. Check Progress**
 To monitor the run, use:
 
 ```bash run_pipeline.sh progress```
@@ -160,17 +161,14 @@ This generates a progress report in your group output directory.
 
 The report helps you check:
 
-how many chunks are complete
-
-which chunks are still missing
-
-whether a chromosome has finished
-
-whether the run is ready for merging
+- how many chunks are complete
+- which chunks are still missing
+- whether a chromosome has finished
+- whether the run is ready for merging
 
 You can run the progress check as often as needed while the main job is running.
 
-4. Merge Final Outputs
+**4. Merge Final Outputs**
 
 Only run this step after the main chunk-processing job has completed:
 
@@ -178,23 +176,26 @@ Only run this step after the main chunk-processing job has completed:
 
 This merges all filtered chunk-level VCFs into final chromosome-level VCF files.
 
-Available Commands
+## Available Commands
 ```bash run_pipeline.sh <command>```
 
-Command	Action
-setup	Submit 01_make_regions.sh to create regions.tsv
-submit	Submit 02_run_chunks.sh for parallel variant calling
-progress	Submit 04_check_progress.sh to generate a progress report
-merge	Submit 03_merge_chromosomes.sh to merge chunked outputs
-help	Show usage information
-Recommended Order
+Command	                Action
+setup	                Submit 01_make_regions.sh to create regions.tsv
+submit	                Submit 02_run_chunks.sh for parallel variant calling
+progress                Submit 04_check_progress.sh to generate a progress report
+merge	                Submit 03_merge_chromosomes.sh to merge chunked outputs
+help	                Show usage information
+
+## Recommended Order
 
 Run the stages in this order:
 
+```bash
 bash run_pipeline.sh setup
 bash run_pipeline.sh submit
 bash run_pipeline.sh progress
 bash run_pipeline.sh merge
+```
 
 In practice, the correct workflow is:
 
@@ -214,15 +215,11 @@ If the submitted job is still listed, it is either running or waiting in the que
 
 You can also inspect the pipeline output folders, especially:
 
-master_logs/
-
-logs/
-
-summaries/
-
-checkpoints/
-
-chunks/
+- master_logs/
+- logs/
+- summaries/
+- checkpoints/
+- chunks/
 
 ## Resuming After Failure
 Re-running the pipeline
@@ -311,7 +308,7 @@ dbSNP file such as:
 
 dbsnp_146.hg38.vcf.gz
 
-Notes
+## Notes
 
 This workflow is intended for chromosome-group-based processing in shared HPC environments.
 
@@ -323,23 +320,23 @@ Haploid calling is handled separately for chromosomes where diploid assumptions 
 
 Each user only needs to do the following:
 
-Clone the repository
+1. Clone the repository
+2. Edit pipeline.config
 
-Edit pipeline.config
-
-Set their assigned chromosomes in CHROM_LIST
+3. Set their assigned chromosomes in CHROM_LIST
 
 Run:
 
-bash run_pipeline.sh setup
-bash run_pipeline.sh submit
+```bash run_pipeline.sh setup```
 
 Wait for the job to finish
 
+```bash run_pipeline.sh submit```
+
 Check progress with:
 
-bash run_pipeline.sh progress
+```bash run_pipeline.sh progress```
 
 Once all chunks are complete, run:
 
-bash run_pipeline.sh merge
+```bash run_pipeline.sh merge```
